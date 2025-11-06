@@ -17,7 +17,7 @@ connectDB();
 // allow only local and live requests in production
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
-    const allowedOrigins = ['https://ecom-backend-phdz.onrender.com', 'http://localhost:5000','https://ecom-frontend-lovat.vercel.app/'];
+    const allowedOrigins = ['https://ecom-backend-phdz.onrender.com', 'http://localhost:5000', 'https://ecom-frontend-lovat.vercel.app/','https://fakestoreapi.com'];
     const origin = req.headers.origin;
 
     if (allowedOrigins.includes(origin)) {
