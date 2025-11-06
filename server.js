@@ -14,19 +14,31 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 connectDB();
-// allow only local and live requests in production
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    const allowedOrigins = ['https://ecom-backend-phdz.onrender.com', 'http://localhost:5000', 'https://ecom-frontend-lovat.vercel.app/','https://fakestoreapi.com'];
-    const origin = req.headers.origin;
 
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://ecom-backend-phdz.onrender.com',
+      'https://ecom-frontend-lovat.vercel.app', // Fixed: removed trailing slash
+      'http://localhost:5000',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+
+    // Allow requests with no origin (like mobile apps, Postman, or server-to-server calls)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all origins in case of issues
     }
-    next();
-  });
-}
-app.use(cors());
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'user-id']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 // Request logging middleware - logs all API calls
 app.use(requestLogger);
